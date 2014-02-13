@@ -11,7 +11,7 @@ namespace ImageUploadAPI.Code
             // Retrieve storage account from connection-string
             var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("CloudStorageConnectionString"));
 
-            var container = storageAccount.GetBlobContainer("jgimages");
+            var container = storageAccount.GetBlobContainer("images");
             container.CreateIfNotExist();
 
             // Enable public access to blob
