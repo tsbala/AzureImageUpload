@@ -132,3 +132,7 @@ C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ru\System.Spatial.reso
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\obj\Debug\AzureImageUpload.csprojResolveAssemblyReference.cache
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizer.dll
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizer.Mvc.dll
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizer.xml
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizer.Mvc.xml
