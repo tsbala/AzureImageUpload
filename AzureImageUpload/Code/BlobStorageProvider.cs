@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace ImageUploadAPI.Code
             foreach (var file in FileData)
             {
                 var fileName = Path.GetFileName(file.Headers.ContentDisposition.FileName.Trim('"'));
-                var blob = _container.GetBlockBlobReference(fileName);
+                var blob = _container.GetBlockBlobReference(Guid.NewGuid()+ "/" + fileName);
 
                 using (var stream = File.OpenRead(file.LocalFileName))
                 {
