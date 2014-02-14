@@ -25,7 +25,8 @@ namespace ImageUploadAPI.Code
             foreach (var file in FileData)
             {
                 var fileName = Path.GetFileName(file.Headers.ContentDisposition.FileName.Trim('"'));
-                var blob = _container.GetBlockBlobReference(Guid.NewGuid()+ "/" + fileName);
+                var directory = _container.GetDirectoryReference("/" + Guid.NewGuid());
+                var blob = directory.GetBlockBlobReference(fileName);
 
                 using (var stream = File.OpenRead(file.LocalFileName))
                 {
