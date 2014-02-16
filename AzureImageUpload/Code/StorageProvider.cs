@@ -12,7 +12,6 @@ namespace ImageUploadAPI.Code
             var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("CloudStorageConnectionString"));
 
             var container = storageAccount.GetBlobContainer("images");
-            container.CreateIfNotExist();
 
             // Enable public access to blob
             var permissions = container.GetPermissions();
@@ -29,8 +28,9 @@ namespace ImageUploadAPI.Code
         {
             var client = storageAccount.CreateCloudBlobClient();
             client.RetryPolicy = RetryPolicies.Retry(3, TimeSpan.FromSeconds(5));
-            return client.GetContainerReference(containerName);
+            var container = client.GetContainerReference(containerName);
+            container.CreateIfNotExist();
+            return container;
         }
-
     }
 }
