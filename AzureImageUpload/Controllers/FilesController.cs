@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using ImageUploadAPI.Code;
@@ -15,10 +12,12 @@ namespace ImageUploadAPI.Controllers
     public class FilesController : ApiController
     {
         private readonly CloudBlobContainer _container;
+        private readonly CloudQueue _queue;
 
         public FilesController()
         {
             _container = StorageProvider.DefaultContainer();
+            _queue = StorageProvider.DefaultQueueClient();
         }
 
         public async Task<IEnumerable<FileDetails>> Post()
@@ -28,15 +27,14 @@ namespace ImageUploadAPI.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var provider = new BlobStorageProvider(_container);
+            var provider = new BlobStorageProvider(_container, _queue);
             await Request.Content.ReadAsMultipartAsync(provider);
             return provider.Files;
         }
  
         public IEnumerable<FileDetails> Get()
         {
-            var container = StorageProvider.DefaultContainer();
-            return from CloudBlockBlob blob in container.ListBlobs() select new FileDetails
+            return from CloudBlockBlob blob in _container.ListBlobs() select new FileDetails
                 {
                     Name = blob.Name,
                     Size = blob.Properties.Length,

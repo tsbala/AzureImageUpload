@@ -6,12 +6,11 @@ namespace ImageUploadAPI.Code
 {
     internal static class StorageProvider
     {
+        private static readonly CloudStorageAccount StorageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("CloudStorageConnectionString"));
+
         public static CloudBlobContainer DefaultContainer()
         {
-            // Retrieve storage account from connection-string
-            var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("CloudStorageConnectionString"));
-
-            var container = storageAccount.GetBlobContainer("images");
+            var container = StorageAccount.GetBlobContainer("images");
 
             // Enable public access to blob
             var permissions = container.GetPermissions();
@@ -24,13 +23,26 @@ namespace ImageUploadAPI.Code
             return container;
         }
 
-        private static CloudBlobContainer GetBlobContainer(this CloudStorageAccount storageAccount, string containerName)
+        public static CloudQueue DefaultQueueClient()
         {
-            var client = storageAccount.CreateCloudBlobClient();
+            return StorageAccount.GetQueueClient("resizequeue");
+        }
+
+        private static CloudBlobContainer GetBlobContainer(this CloudStorageAccount cloudStorageAccount, string containerName)
+        {
+            var client = cloudStorageAccount.CreateCloudBlobClient();
             client.RetryPolicy = RetryPolicies.Retry(3, TimeSpan.FromSeconds(5));
             var container = client.GetContainerReference(containerName);
             container.CreateIfNotExist();
             return container;
+        }
+
+        private static CloudQueue GetQueueClient(this CloudStorageAccount cloudStorageAccount, string queueName)
+        {
+            var client = cloudStorageAccount.CreateCloudQueueClient();
+            var queueClient = client.GetQueueReference(queueName);
+            queueClient.CreateIfNotExist();
+            return queueClient;
         }
     }
 }

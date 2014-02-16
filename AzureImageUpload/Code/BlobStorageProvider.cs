@@ -5,18 +5,21 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ImageUploadAPI.Controllers;
 using Microsoft.WindowsAzure.StorageClient;
+using Newtonsoft.Json;
 
 namespace ImageUploadAPI.Code
 {
     public class BlobStorageProvider : MultipartFileStreamProvider
     {
         private readonly CloudBlobContainer _container;
+        private readonly CloudQueue _queue;
         public List<FileDetails> Files { get; private set; }
 
-        public BlobStorageProvider(CloudBlobContainer container)
+        public BlobStorageProvider(CloudBlobContainer container, CloudQueue queue)
             : base(Path.GetTempPath())
         {
             _container = container;
+            _queue = queue;
             Files = new List<FileDetails>();
         }
 
@@ -33,6 +36,7 @@ namespace ImageUploadAPI.Code
                     blob.UploadFromStream(stream);
                 }
 
+
                 File.Delete(file.LocalFileName);
                 Files.Add(new FileDetails
                 {
@@ -44,6 +48,20 @@ namespace ImageUploadAPI.Code
             }
 
             return base.ExecutePostProcessingAsync();
+        }
+
+        private void AddImageResizeMessageToQueue(string directory, string filename, int height, int width)
+        {
+            var resizeParams = new
+                {
+                    Directory = directory,
+                    Filename = filename,
+                    Height = height,
+                    Width = width
+                };
+
+            var message = new CloudQueueMessage(JsonConvert.SerializeObject(resizeParams));
+            _queue.AddMessage(message);
         }
     }
 }
