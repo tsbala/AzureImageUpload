@@ -37,6 +37,11 @@ x64/
 *.vssscc
 .builds
 
+# VS Bits
+[Oo]bj
+[Bb]in
+[Cc]lient[Bb]in
+
 # Visual C++ cache files
 ipch/
 *.aps
