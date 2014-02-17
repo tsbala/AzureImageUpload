@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AzureImageResizeContent" />
+    <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AzureImageResizeContent\diagnostics.wadcfg">
@@ -52,6 +53,9 @@
       <RoleType>Worker</RoleType>
       <RoleName>AzureImageResize</RoleName>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\resizeimagesProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
