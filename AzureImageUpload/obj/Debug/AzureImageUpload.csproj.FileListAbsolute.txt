@@ -149,3 +149,5 @@ C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ko\Microsoft.Data.Serv
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ru\Microsoft.Data.Services.Client.resources.dll
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\zh-Hans\Microsoft.Data.Services.Client.resources.dll
 C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\zh-Hant\Microsoft.Data.Services.Client.resources.dll
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizerLib.dll
+C:\Users\biyer\.ssh\AzureImageUpload\AzureImageUpload\bin\ImageResizerLib.pdb

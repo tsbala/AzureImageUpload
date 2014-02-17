@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ImageResizer;
+using ImageResizerLib.DTO;
 using ImageUploadAPI.Controllers;
 using Microsoft.WindowsAzure.StorageClient;
 using Newtonsoft.Json;
@@ -12,15 +14,13 @@ namespace ImageUploadAPI.Code
     public class BlobStorageProvider : MultipartFileStreamProvider
     {
         private readonly CloudBlobContainer _container;
-        private readonly CloudQueue _queue;
-        public List<FileDetails> Files { get; private set; }
+        public List<ImageDetails> Images { get; private set; }
 
-        public BlobStorageProvider(CloudBlobContainer container, CloudQueue queue)
+        public BlobStorageProvider(CloudBlobContainer container)
             : base(Path.GetTempPath())
         {
             _container = container;
-            _queue = queue;
-            Files = new List<FileDetails>();
+            Images = new List<ImageDetails>();
         }
 
         public override Task ExecutePostProcessingAsync()
@@ -28,7 +28,8 @@ namespace ImageUploadAPI.Code
             foreach (var file in FileData)
             {
                 var fileName = Path.GetFileName(file.Headers.ContentDisposition.FileName.Trim('"'));
-                var directory = _container.GetDirectoryReference(Guid.NewGuid().ToString());
+                var identifier = Guid.NewGuid().ToString();
+                var directory = _container.GetDirectoryReference(identifier);
                 var blob = directory.GetBlockBlobReference(fileName);
 
                 using (var stream = File.OpenRead(file.LocalFileName))
@@ -38,30 +39,16 @@ namespace ImageUploadAPI.Code
 
 
                 File.Delete(file.LocalFileName);
-                Files.Add(new FileDetails
+                Images.Add(new ImageDetails
                 {
-                    ContentType = blob.Properties.ContentType,
-                    Name = blob.Name,
+                    Name = fileName,
                     Size = blob.Properties.Length,
-                    Location = blob.Uri.AbsoluteUri
+                    Location = blob.Uri.AbsoluteUri,
+                    Identifier = identifier
                 }); 
             }
 
             return base.ExecutePostProcessingAsync();
-        }
-
-        private void AddImageResizeMessageToQueue(string directory, string filename, int height, int width)
-        {
-            var resizeParams = new
-                {
-                    Directory = directory,
-                    Filename = filename,
-                    Height = height,
-                    Width = width
-                };
-
-            var message = new CloudQueueMessage(JsonConvert.SerializeObject(resizeParams));
-            _queue.AddMessage(message);
         }
     }
 }

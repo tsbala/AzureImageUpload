@@ -131,9 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Code\StorageProvider.cs" />
+    <Compile Include="Code\ImageResizeMessage.cs" />
     <Compile Include="Code\BlobStorageProvider.cs" />
-    <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -156,7 +156,15 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureImageDTO\ImageResizerLib.csproj">
+      <Project>{ECE4180A-681D-48DE-9788-787AE6BDB0A0}</Project>
+      <Name>ImageResizerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
