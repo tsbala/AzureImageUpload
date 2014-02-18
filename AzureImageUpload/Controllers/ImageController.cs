@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using ImageResizerLib.DTO;
 using ImageResizerLib.Configuration;
 using ImageUploadAPI.Code;
@@ -22,6 +23,7 @@ namespace ImageUploadAPI.Controllers
             _queue = StorageProvider.DefaultQueueClient();
         }
 
+        [EnableCors("*", "*", "POST")]
         public async Task<IEnumerable<ImageDetails>> Post()
         {
             if (!Request.Content.IsMimeMultipartContent("form-data"))

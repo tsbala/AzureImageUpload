@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image upload using Azure</title>
+    </head>
+    <body ng-app="app">
+        <script src="./js/angular-file-upload-shim.min.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js" type="text/javascript"></script>
+        <script src="./js/angular-file-upload.min.js" type="text/javascript"></script>
+        <script src="./js/app.js" type="text/javascript"></script>
+        <div ng-controller="azureImageUpload">
+            <input type="text" ng-model="myModelObj">
+            <input type="file" ng-file-select="onFileSelect($files)" >
+            <div>
+                <img  ng-src="{{imageUrl}}" />
+                <br/>
+                <img  ng-src="{{imageUrl160x160}}" />
+                <br/>
+                <img  ng-src="{{imageUrl400x400}}" />
+            </div>
+        </div>
+    </body>
+</html>
